@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 
 export default function DoctorCard({ doctor }) {
   return (
@@ -25,9 +26,11 @@ export default function DoctorCard({ doctor }) {
           Fee: ৳{doctor.fee}
         </p>
 
-        <button className="mt-4 w-full bg-blue-600 text-white py-2 rounded-lg">
-          View Details
-        </button>
+        <Link href={`/doctor/${doctor.id}`}>
+          <button className="mt-4 w-full bg-blue-600 text-white py-2 rounded-lg">
+            View Details
+          </button>
+        </Link>
       </div>
 
     </div>
