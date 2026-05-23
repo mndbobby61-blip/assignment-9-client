@@ -1,11 +1,17 @@
+"use client";
+
 import doctors from "@/data/doctors.json";
 import Image from "next/image";
+import { useState, use } from "react";
+import BookingModal from "@/app/components/BookingModal";
 
-export default async function DoctorDetails({ params }) {
-    // console.log("PARAMS:", params);
-    const { id } = await params;
-    
+export default function DoctorDetails({ params }) {
+
+  const { id } = use(params); // ✅ FIXED HERE
+
   const doctor = doctors.find((d) => d.id === id);
+
+  const [open, setOpen] = useState(false);
 
   if (!doctor) {
     return (
@@ -20,7 +26,6 @@ export default async function DoctorDetails({ params }) {
 
       <div className="grid md:grid-cols-2 gap-10 bg-white shadow-lg rounded-2xl overflow-hidden">
 
-        {/* Image */}
         <div className="relative w-full h-[400px]">
           <Image
             src={doctor.image}
@@ -30,14 +35,11 @@ export default async function DoctorDetails({ params }) {
           />
         </div>
 
-        {/* Details */}
         <div className="p-6">
           <h1 className="text-3xl font-bold">{doctor.name}</h1>
-          <p className="text-blue-600 mt-1">{doctor.specialty}</p>
+          <p className="text-blue-600">{doctor.specialty}</p>
 
-          <p className="text-gray-600 mt-4">
-            {doctor.description}
-          </p>
+          <p className="mt-4 text-gray-600">{doctor.description}</p>
 
           <div className="mt-5 space-y-2">
             <p><b>Hospital:</b> {doctor.hospital}</p>
@@ -47,12 +49,22 @@ export default async function DoctorDetails({ params }) {
             <p><b>Rating:</b> ⭐ {doctor.rating}</p>
           </div>
 
-          <button className="mt-6 w-full bg-blue-600 text-white py-3 rounded-lg">
+          <button
+            onClick={() => setOpen(true)}
+            className="mt-6 w-full bg-blue-600 text-white py-3 rounded-lg"
+          >
             Book Appointment
           </button>
         </div>
 
       </div>
+
+      <BookingModal
+        open={open}
+        setOpen={setOpen}
+        doctor={doctor}
+      />
+
     </div>
   );
 }
