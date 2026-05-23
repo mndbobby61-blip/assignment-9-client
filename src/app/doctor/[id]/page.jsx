@@ -1,8 +1,11 @@
 import doctors from "@/data/doctors.json";
 import Image from "next/image";
 
-export default function DoctorDetails({ params }) {
-  const doctor = doctors.find((d) => d.id === params.id);
+export default async function DoctorDetails({ params }) {
+    // console.log("PARAMS:", params);
+    const { id } = await params;
+    
+  const doctor = doctors.find((d) => d.id === id);
 
   if (!doctor) {
     return (
