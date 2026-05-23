@@ -7,7 +7,7 @@ import BookingModal from "@/app/components/BookingModal";
 
 export default function DoctorDetails({ params }) {
 
-  const { id } = use(params); // ✅ FIXED HERE
+  const { id } = use(params); 
 
   const doctor = doctors.find((d) => d.id === id);
 
