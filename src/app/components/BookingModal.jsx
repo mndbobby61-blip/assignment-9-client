@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { authClient } from "@/lib/auth-client";
 
 export default function BookingModal({ open, setOpen, doctor }) {
   const [formData, setFormData] = useState({
@@ -20,16 +21,33 @@ export default function BookingModal({ open, setOpen, doctor }) {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    console.log({
+    const session = await authClient.getSession();
+
+    const bookingData = {
+      userEmail: session?.data?.user?.email,
+      doctorId: doctor.id,
       doctorName: doctor.name,
+      specialty: doctor.specialty,
       ...formData,
+    };
+
+    const res = await fetch("http://localhost:5000/bookings", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(bookingData),
     });
 
-    alert("Appointment booked successfully!");
-    setOpen(false);
+    const data = await res.json();
+
+    if (data.insertedId || data.acknowledged) {
+      alert("Appointment booked successfully!");
+      setOpen(false);
+    }
   };
 
   return (
@@ -60,17 +78,11 @@ export default function BookingModal({ open, setOpen, doctor }) {
             type="text"
             name="patientName"
             placeholder="Patient Name"
-            required
             onChange={handleChange}
             className="w-full border p-3 rounded-lg"
           />
 
-          <select
-            name="gender"
-            required
-            onChange={handleChange}
-            className="w-full border p-3 rounded-lg"
-          >
+          <select name="gender" onChange={handleChange} className="w-full border p-3 rounded-lg">
             <option value="">Select Gender</option>
             <option>Male</option>
             <option>Female</option>
@@ -79,8 +91,7 @@ export default function BookingModal({ open, setOpen, doctor }) {
           <input
             type="text"
             name="phone"
-            placeholder="Phone Number"
-            required
+            placeholder="Phone"
             onChange={handleChange}
             className="w-full border p-3 rounded-lg"
           />
@@ -88,28 +99,18 @@ export default function BookingModal({ open, setOpen, doctor }) {
           <input
             type="date"
             name="appointmentDate"
-            required
             onChange={handleChange}
             className="w-full border p-3 rounded-lg"
           />
 
-          <select
-            name="appointmentTime"
-            required
-            onChange={handleChange}
-            className="w-full border p-3 rounded-lg"
-          >
+          <select name="appointmentTime" onChange={handleChange} className="w-full border p-3 rounded-lg">
             <option value="">Select Time</option>
-
-            {doctor.availability?.map((time, i) => (
-              <option key={i}>{time}</option>
+            {doctor.availability?.map((t, i) => (
+              <option key={i}>{t}</option>
             ))}
           </select>
 
-          <button
-            type="submit"
-            className="w-full bg-blue-600 text-white py-3 rounded-lg"
-          >
+          <button className="w-full bg-blue-600 text-white py-3 rounded-lg">
             Confirm Booking
           </button>
 
