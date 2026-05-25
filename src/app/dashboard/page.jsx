@@ -53,9 +53,8 @@ export default function Dashboard() {
       });
 
       // LOAD BOOKINGS
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/bookings?email=${currentUser.email}`
-      );
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/bookings?email=${currentUser.email}`)
+    
 
       const data = await res.json();
 

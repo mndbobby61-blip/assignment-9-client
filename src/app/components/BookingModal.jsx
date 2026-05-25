@@ -34,7 +34,7 @@ export default function BookingModal({ open, setOpen, doctor }) {
       ...formData,
     };
 
-    const res = await fetch("https://assignment-9-server-1vpk.vercel.app/bookings", {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/bookings`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
