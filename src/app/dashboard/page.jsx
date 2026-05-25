@@ -54,7 +54,7 @@ export default function Dashboard() {
 
       // LOAD BOOKINGS
       const res = await fetch(
-        `http://localhost:5000/bookings?email=${currentUser.email}`
+        `${process.env.NEXT_PUBLIC_API_URL}/bookings?email=${currentUser.email}`
       );
 
       const data = await res.json();
@@ -87,7 +87,7 @@ export default function Dashboard() {
 
     if (!confirmDelete) return;
 
-    await fetch(`http://localhost:5000/bookings/${id}`, {
+    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/bookings/${id}`, {
       method: "DELETE",
     });
 
@@ -115,7 +115,7 @@ export default function Dashboard() {
     };
 
     await fetch(
-      `http://localhost:5000/bookings/${editingBooking._id}`,
+      `${process.env.NEXT_PUBLIC_API_URL}/bookings/${editingBooking._id}`,
       {
         method: "PATCH",
         headers: {
